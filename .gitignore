@@ -1,0 +1,11 @@
+# Nix-specific
+/result*
+/secrets/unencrypted/ # If you plan to use a secrets management tool like agenix or sops-nix
+*.gcmanifest
+narinfo-cache.json
+narinfo-cache.d # For nix-direnv
+
+# General
+*.bak
+*~
+.DS_Store
