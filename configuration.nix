@@ -81,6 +81,7 @@
     greetd.tuigreet  # For the text-based login screen
     alacritty
     brave
+    nil
   ];
 
   # Some programs need SUID wrappers, can be configured further or are
