@@ -110,17 +110,16 @@ in
   };
 
   # You can also manage Helix configuration declaratively if you wish:
-  # programs.helix = {
-  #   enable = true;
-  #   settings = {
-  #     theme = "onedark"; // Example theme
-  #     editor = {
-  #       line-number = "relative";
-  #       lsp.display-messages = true;
-  #     };
-  #   };
-  #   # languages = { ... }; // For language server configurations
-  # };
+  programs.helix = {
+    enable = true;
+    settings = {
+      theme = "yellowed";
+      editor = {
+        lsp.display-messages = true;
+      };
+    };
+    # languages = { ... }; // For language server configurations
+  };
 
   # Allow Home Manager to manage itself and other user services
   systemd.user.services.hm-reload = {
