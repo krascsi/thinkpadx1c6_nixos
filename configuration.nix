@@ -12,6 +12,37 @@
 
   # Enable experimental Nix features for flakes
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
+
+  nix = {
+    settings = {
+      # Add to the list of substituters (binary caches)
+      # It's good to keep the default cache.nixos.org
+      substituters = [
+        "https://cache.nixos.org/"
+        "https://cache.garnix.io/"
+        # If you have other substituters already listed, include them here too
+      ];
+
+      # Add the corresponding public keys for trusted caches
+      trusted-public-keys = [
+        "cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY="
+        "garnix.cache.nixos.org-1:LGgY2n6vlK237n532k33SGCnL9WJ6hkG3Jvh2gGFs7w="
+        # If you have other trusted keys already listed, include them here too
+      ];
+
+      # Ensure experimental features for flakes are enabled
+      # (nix-command is often needed with flakes)
+      # Or, if you want to set it definitively and your NixOS version supports it directly:
+      # experimental-features = [ "nix-command" "flakes" ];
+      # The mkForce line above merges with existing ones, which can be safer if other modules set some.
+      # If experimental-features isn't already a list in your NixOS version's nix.settings,
+      # you might need to use nix.extraOptions like:
+      # extraOptions = ''
+      #   experimental-features = nix-command flakes
+      # '';
+      # But the nix.settings.experimental-features list is the modern way.
+    };
+  };
   # Bootloader.
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -83,6 +114,7 @@
     brave
     nil
   ];
+
 
   # languages = { ... }; // For language server configurations
   # Some programs need SUID wrappers, can be configured further or are

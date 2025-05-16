@@ -24,13 +24,7 @@ in
   # Nushell configuration
   programs.nushell = {
     enable = true;
-    # To ensure direnv hook is sourced by Nushell:
-    # The programs.direnv.enableNushellIntegration = true; should handle this,
-    # but if not, you might need to manually add to extraConfig:
-    # extraConfig = ''
-    #   source ${pkgs.direnv}/share/direnv/direnv.nu
-    # '';
-    # However, the Home Manager option is preferred.
+    # ...
   };
 
   # Direnv for automatic environment switching
@@ -45,71 +39,59 @@ in
     enable = true;
     userName = "krascsi";
     userEmail = "krascsenits.bence@gmail.com";
-    # Consider adding other git settings here, e.g., default branch name, editor, etc.
-    # extraConfig = {
-    #   init.defaultBranch = "main";
-    #   core.editor = "hx"; # If you want to set Helix as git's editor
-    # };
+    # ...
   };
 
   # Your user-specific packages
   home.packages = with pkgs; [
-    # starship was here, but programs.starship.enable = true already installs it.
-    
-    # Developer utility tools
-    nix-tree # Utility to visualize Nix derivation trees
-    # ripgrep # Fast grep alternative
-    # fd # Simple and fast alternative to find
-
-    # Fonts - very important for a good terminal and UI experience
+    nix-tree
     nerd-fonts.fira-code
     nerd-fonts.jetbrains-mono
-    noto-fonts # Comprehensive font family for general UI and web content
-    # liberation_ttf # Another good set of common fonts
-    # dejavu_fonts
-
-    # For your interest in functional programming languages:
-    # These are better managed per-project via devShells in those projects' flakes.
-    # However, if you want global access to compilers/interpreters for quick experiments:
-    # ghcMinimal # Minimal Haskell compiler
-    # cabal-install # Haskell build tool
-    # ocaml # OCaml compiler
-    # opam # OCaml package manager
-    # lean4 # Lean 4 theorem prover (might be available as lean or lean-bin; check nix search)
-    # rustup # For managing Rust toolchains (though Rust is also excellent with project-local flakes)
+    noto-fonts
+    # Add i3status here if you prefer, but programs.i3status.enable = true will also install it.
   ];
 
-  # Example: Configuring SSH client
-  # programs.ssh = {
-  #   enable = true;
-  #   # addKeysToAgent = "yes";
-  #   # knownHosts = { ... };
-  #   # matchBlocks = {
-  #   #   "my-server" = {
-  #   #     hostname = "192.168.1.100";
-  #   #     user = "myuser";
-  #   #     # SOCKS proxy for this host via another host
-  #   #     # dynamicForward = "1080";
-  #   #   };
-  #   # };
-  # };
+  # --- i3status Configuration ---
+  # In /etc/nixos/krascsi-home.nix
+  programs.i3status = {
+    enable = true;
+    enableDefault = true; 
+  };
+  # --- Sway Configuration ---
+  wayland.windowManager.sway = {
+    enable = true;
+    # package = null; # If programs.sway.enable = true is in configuration.nix
 
-  # If you use GnuPG
-  # programs.gpg.enable = true;
-  # services.gpg-agent = {
-  #   enable = true;
-  #   enableSshSupport = true; # If you want gpg-agent to also act as an ssh-agent
-  #   # defaultCacheTtl = 1800;
-  #   # maxCacheTtl = 7200;
-  # };
+    config = {
+      # modifier = "Mod4";
+      # terminal = "${pkgs.alacritty}/bin/alacritty";
 
+      bars = [{
+        # id = "bar-0";
+        # mode = "dock";
+        # position = "bottom";
+
+        # --- CORRECTED STATUSCOMMAND BELOW ---
+        statusCommand = "${pkgs.i3status}/bin/i3status"; # Reverted to string path
+        fonts = [ "pango:JetBrainsMono Nerd Font 10" ];   # This should still be correct
+
+        # colors = {
+        #   background = "#2E3440"; 
+        #   statusline = "#D8DEE9"; 
+        #   # ... etc ...
+        # };
+      }];
+      # ... other Sway config options ...
+    };
+    # extraConfig = ''
+    # '';
+  };    
   # Set Helix as the default editor via environment variables
   home.sessionVariables = {
     EDITOR = "hx";
     VISUAL = "hx";
   };
 
-  # You can also manage Helix configuration declaratively if you wish:
   programs.helix = {
     enable = true;
     settings = {
